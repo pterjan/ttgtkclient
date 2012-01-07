@@ -87,6 +87,12 @@ class TTClient
 		return res.body
 	end
 
+	def set_props(props)
+		proplist = props.keys.map{|k| "<REQ CMD=\"propset\"><PROP NAME=\"#{k}\"><VAL>#{props[k]}</VAL></PROP></REQ>"}.join
+		res = post('/cgi/bin', "<?xml version=\"1.0\"?><?RMCXML version=\"1.0\"?><RMCSEQ>#{proplist}</RMCSEQ>")
+		return res.body
+	end
+
 	def get_info
 		res = get("/cgi/info.txt")
 		info = {}
