@@ -83,8 +83,7 @@ class TTClient
 	def get_props(props)
 		proplist = props.map{|p| "<PROP NAME=\"#{p}\"/>"}.join
 		res = post('/cgi/bin', "<?xml version=\"1.0\"?><?RMCXML version=\"1.0\"?><RMCSEQ><REQ CMD=\"propget\"><PROPLIST>#{proplist}</PROPLIST></REQ></RMCSEQ>")
-		# <?xml version='1.0'?><?RMCXML version='1.0'?><RMCSEQ><RESP CMD="propget"><RC>0x0</RC><PROPLIST><PROP NAME="SERVER_KEYBOARD"><PERMS>RW</PERMS><VAL>FR</VAL></PROP><PROP NAME="ENABLE_REMOTE_FLOPPY_BOOT"><PERMS>RW</PERMS><VAL>FALSE</VAL></PROP><PROP NAME="TFTP_ADDR_REBOOT"><PERMS>RW</PERMS><VAL>172.16.0.5</VAL></PROP><PROP NAME="TFTP_REBOOT_FILE"><PERMS>RW</PERMS><VAL>ttrc0304.bin</VAL></PROP><PROP NAME="SERVER_CODEPAGE"><PERMS>RW</PERMS><VAL>850</VAL></PROP></PROPLIST></RESP></RMCSEQ>
-		return res.body
+		return Hash[res.body.scan(/<PROP NAME="([^"]*)"><PERMS>[^<]*<\/PERMS><VAL>([^<]*)<\/VAL><\/PROP>/)]
 	end
 
 	def set_props(props)
