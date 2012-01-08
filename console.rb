@@ -57,8 +57,8 @@ class Console
 		end	
 	end
 
-	def send_key(scancodes, mods={})
-		k = scancodes
+	def send_key(scancode, mods={})
+		k = [ scancode ]
 		if (mods["alt"] && !k.include?("38"))
 			k.unshift("38")
 		end
@@ -67,6 +67,9 @@ class Console
 		end
 		if (mods["shift"] && !k.include?("2a"))
 			k.unshift("2a")
+		end
+		if (mods["altgr"] && !k.include?("64"))
+			k.unshift("64")
 		end
 		k += k.reverse.map{|c| (c.to_i(16)|0x80).to_s(16)}.find_all{|c| c != "e0"}
 		p k
@@ -135,6 +138,7 @@ class Console
 		window.add(vbox)
 		get_console(true)
 		Gtk.timeout_add(10000){ get_console; @running }
+		keyboard = @client.get_props(["SERVER_KEYBOARD"])["SERVER_KEYBOARD"]
 		window.signal_connect("key-release-event") {|w,e|
 			puts Gdk::Keyval::to_name(e.keyval)
 			mods = {}
@@ -149,7 +153,11 @@ class Console
 			end
 			p mods
 			Gtk.idle_add() {
-				send_key(gdk_keyval_to_scancodes(e.keyval), mods)
+				(key, keymods) = gdk_keyval_to_scancodes(keyboard, e.keyval)
+				if key != nil
+					keymods.each{|mod| mods[mod] = true}
+					send_key(key, mods)
+				end
 				get_console(true)
 				false
 			}
