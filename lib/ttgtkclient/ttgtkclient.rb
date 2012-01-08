@@ -110,5 +110,3 @@ class TTGtkClient
 		Gtk.main
 	end
 end
-
-gtkclient = TTGtkClient.new
