@@ -37,6 +37,7 @@ class TTGtkClient
 		user_entry = Gtk::Entry.new
 		user_entry.text = "ADMIN"
 		user_label.mnemonic_widget = user_entry
+		server_entry.signal_connect('activate') { user_entry.grab_focus }
 		table.attach(user_label, 0, 1, 1, 2, Gtk::FILL, Gtk::FILL, 3, 3)
 		table.attach(user_entry, 1, 2, 1, 2, Gtk::EXPAND, Gtk::FILL, 3, 3)
 		pass_label = Gtk::Label.new("Password")
@@ -45,6 +46,7 @@ class TTGtkClient
 		pass_entry.caps_lock_warning=true
 		pass_label.mnemonic_widget = pass_entry
 		pass_entry.activates_default=true
+		user_entry.signal_connect('activate') { pass_entry.grab_focus }
 		table.attach(pass_label, 0, 1, 2, 3, Gtk::FILL, Gtk::FILL, 3, 3)
 		table.attach(pass_entry, 1, 2, 2, 3, Gtk::EXPAND, Gtk::FILL, 3, 3)
 		dialog.vbox.add(table)
