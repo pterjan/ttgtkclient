@@ -42,6 +42,7 @@ class TTGtkClient
 		pass_label = Gtk::Label.new("Password")
 		pass_entry = Gtk::Entry.new
 		pass_entry.visibility = false
+		pass_entry.caps_lock_warning=true
 		pass_label.mnemonic_widget = pass_entry
 		pass_entry.activates_default=true
 		table.attach(pass_label, 0, 1, 2, 3, Gtk::FILL, Gtk::FILL, 3, 3)
