@@ -43,11 +43,12 @@ class TTGtkClient
 		pass_entry = Gtk::Entry.new
 		pass_entry.visibility = false
 		pass_label.mnemonic_widget = pass_entry
-		pass_entry.signal_connect('activate'){ dialog.response(Gtk::Dialog::RESPONSE_ACCEPT) }
+		pass_entry.activates_default=true
 		table.attach(pass_label, 0, 1, 2, 3, Gtk::FILL, Gtk::FILL, 3, 3)
 		table.attach(pass_entry, 1, 2, 2, 3, Gtk::EXPAND, Gtk::FILL, 3, 3)
 		dialog.vbox.add(table)
 		dialog.resizable = false
+		dialog.default_response = Gtk::Dialog::RESPONSE_ACCEPT
 		dialog.show_all
 		dialog.run { |response|
 			if response == Gtk::Dialog::RESPONSE_ACCEPT
