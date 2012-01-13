@@ -13,6 +13,7 @@
 require 'ttclient'
 require 'console'
 require 'control'
+require 'logs'
 
 class TTGtkClient
 	def initialize
@@ -107,6 +108,9 @@ class TTGtkClient
 		rc = Gtk::Button.new("Remote Control")
 		rc.signal_connect('released') { RemoteControl.new(@client).display_menu }
 		vbox.add(rc)
+		logs = Gtk::Button.new("Logs")
+		logs.signal_connect('released') { p Logs.new(@client).fetch }
+		vbox.add(logs)
 		quit = Gtk::Button.new("Quit")
 		quit.signal_connect('released') { Gtk.main_quit }
 		vbox.add(quit)
