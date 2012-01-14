@@ -26,7 +26,7 @@ class Sensors
 	end
 
 	def get_sensors
-		get_list
+		get_list unless @keys
 		i = 0
 		l = []
 		while i <= @keys.size/4
@@ -54,4 +54,29 @@ class Sensors
 		Hash[l]
 	end
 
+	def display_sensors
+		dialog = Gtk::Dialog.new("Sensors",
+					nil,
+					nil,
+					[ Gtk::Stock::CLOSE, Gtk::Dialog::RESPONSE_CLOSE ])
+		model = Gtk::TreeStore.new(String, String)
+		sensors = get_sensors
+		sensors.keys.sort.each{|k|
+			s = sensors[k]
+			next unless s["ENABLED"] == "Enabled"
+			val = s["VAL"].to_s
+			val += " #{s["UNITS"]}" if s["UNITS"]
+			siter = model.append(nil).set_value(0, s["NAME"]).set_value(1, val)
+		}
+		tv = Gtk::TreeView.new(model)
+		renderer = Gtk::CellRendererText.new
+		column0 = Gtk::TreeViewColumn.new("Name", renderer, :text => 0)
+		column1 = Gtk::TreeViewColumn.new("Value", renderer, :text => 1)
+		tv.append_column(column0)
+		tv.append_column(column1)
+		dialog.vbox.add(tv)
+		dialog.show_all
+		dialog.run
+		dialog.destroy
+	end
 end

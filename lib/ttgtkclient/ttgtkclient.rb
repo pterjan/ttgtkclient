@@ -114,7 +114,7 @@ class TTGtkClient
 		logs.signal_connect('released') { p Logs.new(@client).fetch }
 		vbox.add(logs)
 		sensors = Gtk::Button.new("Sensors")
-		sensors.signal_connect('released') { p Sensors.new(@client).get_sensors }
+		sensors.signal_connect('released') { p Sensors.new(@client).display_sensors }
 		vbox.add(sensors)
 		users = Gtk::Button.new("Users")
 		users.signal_connect('released') { p Users.new(@client).get_list }
