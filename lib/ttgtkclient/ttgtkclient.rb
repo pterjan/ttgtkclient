@@ -15,6 +15,7 @@ require 'console'
 require 'control'
 require 'logs'
 require 'sensors'
+require 'users'
 
 class TTGtkClient
 	def initialize
@@ -115,6 +116,9 @@ class TTGtkClient
 		sensors = Gtk::Button.new("Sensors")
 		sensors.signal_connect('released') { p Sensors.new(@client).get_sensors }
 		vbox.add(sensors)
+		users = Gtk::Button.new("Users")
+		users.signal_connect('released') { p Users.new(@client).get_list }
+		vbox.add(users)
 		quit = Gtk::Button.new("Quit")
 		quit.signal_connect('released') { Gtk.main_quit }
 		vbox.add(quit)
