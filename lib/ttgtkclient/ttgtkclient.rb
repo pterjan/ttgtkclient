@@ -111,7 +111,7 @@ class TTGtkClient
 		rc.signal_connect('released') { RemoteControl.new(@client).display_menu }
 		vbox.add(rc)
 		logs = Gtk::Button.new("Logs")
-		logs.signal_connect('released') { p Logs.new(@client).fetch }
+		logs.signal_connect('released') { Logs.new(@client).display_logs }
 		vbox.add(logs)
 		sensors = Gtk::Button.new("Sensors")
 		sensors.signal_connect('released') { p Sensors.new(@client).display_sensors }
