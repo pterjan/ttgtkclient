@@ -68,6 +68,7 @@ class Sensors
 			val += " #{s["UNITS"]}" if s["UNITS"]
 			siter = model.append(nil).set_value(0, s["NAME"]).set_value(1, val)
 		}
+		model.set_sort_column_id(0)
 		tv = Gtk::TreeView.new(model)
 		renderer = Gtk::CellRendererText.new
 		column0 = Gtk::TreeViewColumn.new("Name", renderer, :text => 0)
