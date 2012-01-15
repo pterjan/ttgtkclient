@@ -53,22 +53,23 @@ class TTClient
 	end
 
 	def get_challenge
+		return @challenge if @challenge
 		res = get("/cgi/challenge")
-		if res.code != "200" then
-			throw "Failed to get challenge"
+		if res.code != "200" || res.body !~ /<RC>0x0<\/RC>/
+			raise RuntimeError, "Failed to get challenge", caller
 		end
 		@cookie =  res['set-cookie'].split('; ')[0]
-		#p @cookie
 		xml = res.body
 		xml =~ /<RMCLOGIN><CHALLENGE>(.*)<\/CHALLENGE><RC>(.*)</
-		return $1
+		@challenge = $1
+		return @challenge
 	end
 
 	def do_login(login, pass)
 		hash = encode_pass(get_challenge, pass)
 		res = get("/cgi/login?user=#{login}&hash=#{hash}")
-		if res.code != "200" then
-			throw "Failed to login"
+		if res.code != "200" || res.body !~ /<RC>0x0<\/RC>/
+			raise ArgumentError, "Invalid Credentials", caller
 		end
 		at_exit do
 			do_logout

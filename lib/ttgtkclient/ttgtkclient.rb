@@ -23,6 +23,12 @@ class TTGtkClient
 		display_menu
 	end
 
+	def show_error(parent, msg)
+		md = Gtk::MessageDialog.new(parent, Gtk::Dialog::MODAL|Gtk::Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::ERROR, Gtk::MessageDialog::BUTTONS_CLOSE, msg)
+		md.run
+		md.destroy
+	end
+
 	def create_client
 		dialog = Gtk::Dialog.new("Connection Parameters",
 					nil,
@@ -56,15 +62,27 @@ class TTGtkClient
 		dialog.resizable = false
 		dialog.default_response = Gtk::Dialog::RESPONSE_ACCEPT
 		dialog.show_all
-		dialog.run { |response|
-			if response == Gtk::Dialog::RESPONSE_ACCEPT
-				@client = TTClient.new(server_entry.text)
-				@client.do_login(user_entry.text, pass_entry.text)
-				dialog.destroy
-    			else
-				exit
-  			end
-		}
+		success = false
+		while success != true
+			dialog.run { |response|
+				if response == Gtk::Dialog::RESPONSE_ACCEPT
+					begin
+						@client = TTClient.new(server_entry.text)
+						@client.do_login(user_entry.text, pass_entry.text)
+						success = true
+						dialog.destroy
+					rescue Errno::ECONNREFUSED => e
+						show_error(dialog, "Failed to connect to the server.")
+					rescue ArgumentError => e
+						show_error(dialog, "Invalid credentials.")
+					rescue RuntimeError => e
+						show_error(dialog, "Server rejects us.\nPlease wait for at least 30s before retrying.")
+					end
+				else
+					exit
+				end
+			}
+		end
 	end
 
 	def connect_console
