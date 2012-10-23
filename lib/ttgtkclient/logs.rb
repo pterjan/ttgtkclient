@@ -75,6 +75,8 @@ class Logs
 			sev =  Gtk::Stock::DIALOG_QUESTION
 			if l[:severity] == "Information"
 				sev =  Gtk::Stock::DIALOG_INFO
+			elsif l[:severity] == "Non-Critical"
+				sev =  Gtk::Stock::DIALOG_WARNING
 			else
 				puts "Unknown severity #{l[:severity]}"
 			end
