@@ -42,7 +42,7 @@ class TTClient
 		challenge_bytes = Base64.decode64(challenge).bytes.to_a
 		pass_md5_bytes = Digest::MD5.digest(pass).bytes.to_a
 
-		res = (0..pass_md5.length-1).map{|i| x=i % 16; (challenge_bytes[x] ^ pass_md5_bytes[x]).chr }.join
+		res = (0..pass_md5_bytes.length-1).map{|i| x=i % 16; (challenge_bytes[x] ^ pass_md5_bytes[x]).chr }.join
 		res_md5 = Digest::MD5.digest(res)
 	
 		res_crc = crc16(res_md5)
