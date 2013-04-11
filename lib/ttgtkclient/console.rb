@@ -29,10 +29,10 @@ class Console
 		res = @client.get(path)
 		s = res.body
 		return @data unless s
-		w = s[12]
-		h = s[16]
-		x = s[22]
-		y = s[20]
+		w = s[12].to_i
+		h = s[16].to_i
+		x = s[22].to_i
+		y = s[20].to_i
 		i = 1
 		data = ""
 		attrs = ""
